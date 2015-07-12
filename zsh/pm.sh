@@ -9,7 +9,7 @@ pm () {
   # Initialize projects file
   pm_initialize () {
     # Create the folder
-    if [ ! -d "$PM_BASE" ]; then
+    if [ ! -d $PM_BASE ]; then
       mkdir ~/.pm
     fi
     # Create the file
