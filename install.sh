@@ -17,7 +17,7 @@ if [ -d ~/.pm ]; then
   fi
 fi
 # Check the current console.
-printf "What is your console? [ zsh ]: "
+printf "What's your shell? [ zsh ]: "
 read console
 
 case "$console" in
@@ -29,6 +29,8 @@ case "$console" in
     mv pm.sh .pm
 
     # Add the function to the console
+    echo "" >> .zshrc
+    echo "# PM functions" >> .zshrc
     echo "source ~/.pm/pm.sh" >> .zshrc
 
     # Reload the source
