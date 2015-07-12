@@ -62,7 +62,8 @@ pm list
 
 To contribute `pm`:
 
-* Create an issue with the contribution: bug, enhancement.. (See [develop](#develop))
+* Create an issue with the contribution: bug, enhancement..
+* Fork the project and edit it
 * Create a pull request when you finish
 
 # License
