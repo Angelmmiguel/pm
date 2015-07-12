@@ -56,6 +56,8 @@ pm list
 
 # Example
 
+![Example of PM in a gif](https://raw.githubusercontent.com/Angelmmiguel/pm/master/pm.gif)
+
 # Contribute
 
 To contribute `pm`:
