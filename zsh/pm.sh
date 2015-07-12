@@ -4,10 +4,15 @@
 pm () {
   # Projects file
   PFILE=~/.pm/projects
+  PM_BASE=~/.pm
 
   # Initialize projects file
   pm_initialize () {
-    mkdir ~/.pm
+    # Create the folder
+    if [ ! -d "$PM_BASE" ]; then
+      mkdir ~/.pm
+    fi
+    # Create the file
     echo "# File to store your projects for PM" > $PFILE
   }
 
