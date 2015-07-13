@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 #
 # Script to install pm in your system! Only execute and see the magic ;)
@@ -25,16 +25,22 @@ case "$console" in
     # Create folder and download file
     cd ~
     mkdir .pm
-    wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.sh
-    mv pm.sh .pm
+    wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.zsh
+    mv pm.zsh .pm
 
     # Add the function to the console
     echo "" >> .zshrc
     echo "# PM functions" >> .zshrc
-    echo "source ~/.pm/pm.sh" >> .zshrc
+    echo "source ~/.pm/pm.zsh" >> .zshrc
+    # Add some aliases
+    echo "alias pma=\"pm add\"" >> .zshrc
+    echo "alias pmg=\"pm go\"" >> .zshrc
+    echo "alias pmrm=\"pm remove\"" >> .zshrc
+    echo "alias pml=\"pm list\"" >> .zshrc
+    echo "# end PM"
 
     # Reload the source
-    source ~/.pm/pm.sh
+    source ~/.pm/pm.zsh
 
     # Ok!
     echo "PM is available in your console. Enjoy ;)"
