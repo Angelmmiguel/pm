@@ -1,5 +1,5 @@
 # pm
-The easy way to access to your projects on ZSH. Add your projects to `pm`and switch between them with a command. 
+The easy way to switch to your projects on ZSH. Add your projects to `pm`and switch between them with a command. 
 
 ## Installation
 To install the program, download the installer and execute it.
