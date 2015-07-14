@@ -65,7 +65,7 @@ pm config <add|get|remove> <parameter> (value)
 Available config parameters:
 * `after-all` : execute this command after switch to a project with `pm go`.
 
-For example, you can open sublime on a project when `go` to it:
+For example, you can open Sublime Text on a project when `go` to it:
 
 ```zsh
 pm config add after-all "sublime ."
