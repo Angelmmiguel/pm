@@ -37,7 +37,7 @@ case "$console" in
     echo "alias pmg=\"pm go\"" >> .zshrc
     echo "alias pmrm=\"pm remove\"" >> .zshrc
     echo "alias pml=\"pm list\"" >> .zshrc
-    echo "# end PM"
+    echo "# end PM" >> .zshrc
 
     # Reload the source
     source ~/.pm/pm.zsh
