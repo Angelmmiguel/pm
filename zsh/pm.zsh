@@ -105,7 +105,7 @@ pm () {
             echo "$3=$4" >> $CFILE
             echo "The configuration has been updated"
           else
-            echo "The config parameter $2 doesn't exist"
+            echo "The config parameter $3 doesn't exist"
           fi
         elif [[ $2 == "remove" ]]; then
           # Remove the element
