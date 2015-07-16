@@ -8,8 +8,10 @@ pm () {
   CFILE=~/.pm/config
   # Base
   PM_BASE=~/.pm
-  # Config available values
+  # Available config values
   AVAILABLE_CONFIG=(after-all)
+  # Available config values for project
+  AVAILABLE_PROJECT_CONFIG=(after)
 
   #
   # Initialize projects files
@@ -67,15 +69,17 @@ pm () {
   #
   get_config_value () {
     # Read all lines
-    CONFIG_VALUE=""
+    local config_value=""
     while read line
     do
       el=("${(@s/=/)line}") # @ modifier
       if [[ $el[1] == $1 ]]; then
         # Return the value
-        CONFIG_VALUE=$el[2]
+        config_value=$el[2]
       fi
     done < "$CFILE"
+    # Return the value
+    echo "$config_value"
   }
 
   # Initialize folders and file if isn't exists
@@ -83,7 +87,7 @@ pm () {
 
   # Check commands. Available commands are add|remove|go (go by default)
   if [ $# -lt 1 ]; then
-    echo "Usage: pm <add|remove|go|list|config> <name of project>"
+    echo "Usage: pm <add|remove|go|list|config|config-project> <name of project>"
   else
     case "$1" in
       # Add a project
@@ -190,8 +194,7 @@ pm () {
           cd $PM_PROJ_PATH
           echo "Current project: ${NAME}"
           # Execute after all config if it exists
-          get_config_value "after-all"
-          exe_after=$CONFIG_VALUE
+          exe_after=$(get_config_value "after-all")
           if [[ "$exe_after" != "" ]]; then
             eval $exe_after
           fi
