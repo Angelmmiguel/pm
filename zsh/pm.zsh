@@ -124,8 +124,8 @@ pm () {
           # Show the value of element
           if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
             # Delete the line and save new command
-            get_config_value "after-all"
-            echo "The configuration value for $3 is: $CONFIG_VALUE"
+            config_value=$(get_config_value "after-all")
+            echo "The configuration value for $3 is: $config_value"
           else
             echo "The config parameter $3 doesn't exist"
           fi
