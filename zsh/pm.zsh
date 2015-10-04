@@ -301,15 +301,14 @@ pm () {
         ;;
       # List projects
       'list' | 'l' ) 
-        # Read all lines
         while read line
         do
-          el=("${(@s/:/)line}") # @ modifier
-          if [[ "${line}" == "#"* ]]; then
-            continue
+          if [[ $line =~ ^.*:.* ]]; then
+            el=("${(@s/:/)line}") # : modifier
+            in_project=true
+            last_project=$el[1]
+            echo $el[1]
           fi
-          # Show project
-          echo $el[1]
         done < "$PFILE"
         ;;
       # Remove a project
@@ -318,23 +317,26 @@ pm () {
         NAME=$2
         # Indexes
         PM_INDEX=1
-        PM_DELETE=0
+        PM_DELETE_INITIAL=0
+        PM_DELETE_FINAL=0
         # Read all lines
         while read line
         do
-          el=("${(@s/:/)line}") # @ modifier
-          if [[ $el[1] == $NAME ]]; then
-            PM_DELETE=$PM_INDEX
+          if [[ $line == "$NAME:"* ]]; then
+            PM_DELETE_INITIAL=$PM_INDEX
+          elif [[ $line == "/$NAME" ]]; then
+            PM_DELETE_FINAL=$PM_INDEX
           fi
           PM_INDEX=$(($PM_INDEX + 1))
         done < "$PFILE"
 
         # Check if the repo exist
-        if [[ $PM_DELETE -eq 0  ]]; then
+        if [[ $PM_DELETE_INITIAL -eq 0  ]]; then
           echo "The project doesn't exist"
         else
           # Delete
-          sed -i -e "${PM_DELETE},1d" $PFILE
+          sed -i -e "${PM_DELETE_INITIAL},${PM_DELETE_FINAL}d" $PFILE
+          echo "The project ${NAME} was deleted!"
         fi
         ;;
       # Go to the project
