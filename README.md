@@ -56,6 +56,8 @@ pm list
 
 # Config
 
+## Global
+
 PM allow some config values. To add, edit or remove a config parameter:
 
 ```zsh
@@ -69,6 +71,23 @@ For example, you can open Sublime Text on a project when `go` to it:
 
 ```zsh
 pm config add after-all "sublime ."
+```
+
+## Projects
+
+With PM you can add configuration to projects. To add, edit or remove a config parameter of a project:
+
+```zsh
+pm config-project <project> <add|get|remove> <parameter> (value)
+```
+
+Available config parameters:
+* `after` : execute this command after switch to the project with `pm go`.
+
+For example, you can start [Gulp](http://gulpjs.com/) in a project when `go` to it:
+
+```zsh
+pm config-project myproject add after "gulp"
 ```
 
 # Example
