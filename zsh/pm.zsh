@@ -32,12 +32,12 @@ pm () {
   }
 
   #
-  # Delete a line of a file that start with given string
-  #
+  # Find a line that starts with an string. Return the index
+  # 
   # $1 : String that start the line
   # $2 : Path to the file
   #
-  delete_line_starts () {
+  find_line_starts () {
     # Indexes
     local index=1
     local delete=0
@@ -50,6 +50,34 @@ pm () {
       index=$(($index + 1))
     done < "$2"
 
+    echo "$delete"
+  }
+
+  #
+  # Check if the project given exist or exit the program
+  #
+  # $1 : name of the project
+  #
+  check_project () {
+    local project=$(find_line_starts "$1:" $PFILE)
+
+    # Check if project exist
+    if [[ $project -eq 0  ]]; then
+      echo 'no'
+    else
+      echo 'ok'
+    fi
+  }
+
+  #
+  # Delete a line of a file that start with given string
+  #
+  # $1 : String that start the line
+  # $2 : Path to the file
+  #
+  delete_line_starts () {
+    # Get the index to delete
+    local delete=$(find_line_starts $1 $2)
     # Check if the line exist
     if [[ $delete -eq 0  ]]; then
       return 0
@@ -58,6 +86,94 @@ pm () {
       sed -i -e "${delete},1d" $2
       return 1
     fi
+  }
+
+  #
+  # Add the config parameter to a project
+  #
+  # $1 : String with project
+  # $2 : String with key of config
+  # $3 : String with value config
+  #
+  add_config_to_project () {
+    # Project
+    local project=$1
+    
+    # Delete the project property if exist
+    delete_project_property $1 $2
+
+    # Add the config
+    sed -i '' "/$1:.*/a\\
+               $2=$3\\
+              " $PFILE
+  }
+
+  #
+  # Delete a property of a project
+  #
+  # $1 : String with the project
+  # $2 : String with the property
+  #
+  delete_project_property () {
+    # Find the project
+    local project=$1
+    local index=0
+    local in_project=false
+    local delete=0
+
+    # Read config paramteres
+    while read line
+    do
+      if [[ $line == "$1:"* ]]; then
+        in_project=true
+      elif [[ $line == "/$1"* ]]; then
+        in_project=false
+      elif [[ (in_project) ]]; then
+        config=("${(s/=/)line}")
+        if [[ $config[1] == "$2" ]]; then
+          delete=$(($index + 1))
+        fi
+      fi
+      index=$(($index + 1))
+    done < "$PFILE"
+    
+    # Check if we need to delete the config
+    if [[ $delete -ne 0  ]]; then
+      sed -i -e "${delete},1d" $PFILE
+    fi
+  }
+
+  #
+  # Read a config value of a project
+  #
+  # $1 : String with the name of the project
+  # $2 : String with the name of value
+  #
+  # Return : CONFIG_VALUE
+  #
+  get_config_project_value () {
+    # Find the project
+    local project=$1
+    local in_project=false
+    local value=""
+
+    # Read config paramteres
+    while read line
+    do
+      if [[ $line == "$1:"* ]]; then
+        in_project=true
+      elif [[ $line == "/$1"* ]]; then
+        in_project=false
+      elif [[ (in_project) ]]; then
+        config=("${(s/=/)line}")
+        if [[ $config[1] == "$2" ]]; then
+          value=$config[2]
+        fi
+      fi
+    done < "$PFILE"
+
+    # Return the value
+    echo "$value"
   }
 
   #
@@ -94,10 +210,17 @@ pm () {
       'add' | 'a' )
         # Name of the project
         NAME="$2"
-        PM_PROJ_PATH=$(pwd)
+        # Check if project exist
+        project=$(check_project $2)
+        if [[ "$project" == "no" ]]; then
+          PM_PROJ_PATH=$(pwd)
 
-        # Add it to the file
-        echo "$NAME:$PM_PROJ_PATH" >> $PFILE
+          # Add it to the file
+          echo "$NAME:$PM_PROJ_PATH" >> $PFILE
+          echo "\\$NAME" >> $PFILE
+        else
+          echo "The project $NAME already exists"
+        fi
         ;;
       # Add a config valeu to the program
       'config' )
@@ -131,6 +254,49 @@ pm () {
           fi
         else
           echo "Config usage: pm config <add|get|remove> <parameter> (value)"
+        fi
+        ;;
+      # Add a property to a project
+      'config-project' )
+        # Check if project exist
+        project=$(check_project $2)
+        if [[ "x$project" == "xok" ]]; then
+          # Continue
+          if [[ $3 == "add" ]]; then
+            # Add a new config parameter
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+              add_config_to_project $2 $4 $5
+              echo "The configuration has been updated"
+            else
+              echo "The config parameter $4 doesn't exist"
+            fi
+          elif [[ $3 == "remove" ]]; then
+            # Remove the element
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+              # Delete the config for the project
+              delete_project_property $2 $4
+              echo "The configuration parameter $4 has been removed"
+            else
+              echo "The config parameter $4 doesn't exist"
+            fi
+          elif [[ $3 == "get" ]]; then
+            # Show the value of element
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+              # Get the config value of a project
+              value=$(get_config_project_value $2 $4)
+              if [[ "x$value" == "x" ]]; then
+                echo "The project hasn't got any value for $4"
+              else
+                echo "The configuration value for $4 is: $value"
+              fi
+            else
+              echo "The config parameter $4 doesn't exist"
+            fi
+          else
+            echo "Config usage: pm config-project <project> <add|get|remove> <parameter> (value)"
+          fi
+        else
+          echo "The project $2 doesn't exist"
         fi
         ;;
       # List projects
@@ -195,8 +361,13 @@ pm () {
           echo "Current project: ${NAME}"
           # Execute after all config if it exists
           exe_after=$(get_config_value "after-all")
+          exe_after_project=$(get_config_project_value $NAME "after")
           if [[ "$exe_after" != "" ]]; then
             eval $exe_after
+          fi
+
+          if [[ "$exe_after_project" != "" ]]; then
+            eval $exe_after_project
           fi
         fi
         ;;
