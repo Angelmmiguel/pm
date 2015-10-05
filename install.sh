@@ -4,14 +4,16 @@
 # Script to install pm in your system! Only execute and see the magic ;)
 #
 
+FROM_UPDATE=false
+
 if [ -d ~/.pm ]; then
   # Is installed!
-  printf "PM is installed. Reinstall? [ yes or no ]: "
-  read reinstall
+  printf "PM is installed. Update it? [ yes or no ]: "
+  read update
 
-  if [ "$reinstall" == "yes" ]; then
-    echo "Deleting old files..."
-    rm -fr ~/.pm
+  if [ "$update" == "yes" ]; then
+    echo "Updating PM..."
+    FROM_UPDATE=true
   else
     exit 0
   fi
@@ -29,21 +31,23 @@ case "$console" in
     mv pm.zsh .pm
 
     # Add the function to the console
-    echo "" >> .zshrc
-    echo "# PM functions" >> .zshrc
-    echo "source ~/.pm/pm.zsh" >> .zshrc
-    # Add some aliases
-    echo "alias pma=\"pm add\"" >> .zshrc
-    echo "alias pmg=\"pm go\"" >> .zshrc
-    echo "alias pmrm=\"pm remove\"" >> .zshrc
-    echo "alias pml=\"pm list\"" >> .zshrc
-    echo "# end PM" >> .zshrc
+    if [[ ! FROM_UPDATE ]]; then
+      echo "" >> .zshrc
+      echo "# PM functions" >> .zshrc
+      echo "source ~/.pm/pm.zsh" >> .zshrc
+      # Add some aliases
+      echo "alias pma=\"pm add\"" >> .zshrc
+      echo "alias pmg=\"pm go\"" >> .zshrc
+      echo "alias pmrm=\"pm remove\"" >> .zshrc
+      echo "alias pml=\"pm list\"" >> .zshrc
+      echo "# end PM" >> .zshrc
+    fi
 
     # Reload the source
     source ~/.pm/pm.zsh
 
     # Ok!
-    echo "PM is available in your console. Enjoy ;)"
+    pm ready
   ;;
 
   *)

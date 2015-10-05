@@ -8,7 +8,10 @@ pm () {
   CFILE=~/.pm/config
   # Version File
   VFILE=~/.pm/version
-  VERSION=0.2.rc
+  CURRENT_VERSION=0.2.0rc
+  CURRENT_MAJOR=0
+  CURRENT_MINOR=2
+  CURRENT_PATCH=0rc
   # Base
   PM_BASE=~/.pm
   # Available config values
@@ -32,10 +35,72 @@ pm () {
     if [ ! -f $CFILE  ]; then
       echo "# Config file for PM" > $CFILE
     fi
-    # Create version file
+  }
+
+  #
+  # Check last version of PM and perform update
+  #
+  pm_update_process () {
+    # Load version
+    MAJOR=0
+    MINOR=0
+    PATCH=0
+    RC=false
+
     if [ ! -f $VFILE  ]; then
-      echo "$VERSION" > $VFILE
+      # The file don't exist
+      MINOR=1
+    else
+      version_file=$(head -n 1 $VFILE)
+      version=("${(@s/./)version_file}")
+      MAJOR=$version[1]
+      MINOR=$version[2]
+      PATCH=$version[3]
+      # Check if this version is a release candidate
+      if [[ "$PATCH" =~ rc ]]; then
+        RC=true
+      fi
     fi
+
+    if [[ MAJOR -eq 0 && MINOR -eq 1 ]]; then
+      update_0_1_to_0_2
+    fi
+
+    save_version "$CURRENT_MAJOR.$CURRENT_MINOR.$CURRENT_PATCH"
+  }
+
+  #
+  # Save the current version in Version file
+  #
+  # $1 : String with current version of pm
+  #
+  save_version () {
+    # Create version file
+    if [ -f $VFILE  ]; then
+      rm $VFILE
+    fi
+    # Save the version
+    echo "$1" > $VFILE
+  }
+
+  #
+  # Update the project file from 0.1 version to 0.2
+  #
+  update_0_1_to_0_2 () {
+    current_projects=()
+    while read line
+    do
+      if [[ $line =~ ^.*:.* ]]; then
+        el=("${(@s/:/)line}") # : modifier
+        current_projects+=$el[1]
+      fi
+    done < "$PFILE"
+
+    for i in $current_projects; do
+      sed -i '' "/$i:.*/a\\
+                 /$i\\
+                " $PFILE
+    done
   }
 
   #
@@ -205,6 +270,8 @@ pm () {
     echo "$config_value"
   }
 
+  # Update process of project! :D
+  pm_update_process
   # Initialize folders and file if isn't exists
   pm_initialize
 
@@ -213,6 +280,9 @@ pm () {
     echo "Usage: pm <add|remove|go|list|config|config-project> <name of project>"
   else
     case "$1" in
+      'ready' )
+        echo "PM is available in your console. Enjoy ;)"
+        ;;
       # Add a project
       'add' | 'a' )
         # Name of the project
