@@ -6,6 +6,9 @@ pm () {
   PFILE=~/.pm/projects
   # Config file
   CFILE=~/.pm/config
+  # Version File
+  VFILE=~/.pm/version
+  VERSION=0.2.rc
   # Base
   PM_BASE=~/.pm
   # Available config values
@@ -28,6 +31,10 @@ pm () {
     # Create config file
     if [ ! -f $CFILE  ]; then
       echo "# Config file for PM" > $CFILE
+    fi
+    # Create version file
+    if [ ! -f $VFILE  ]; then
+      echo "$VERSION" > $VFILE
     fi
   }
 
