@@ -17,7 +17,9 @@ Type your shell when the installer ask to you:
 What is your shell? [ zsh ]: 
 ```
 
-Finally, restart your terminal.
+### Update PM
+
+To update PM, run same process than installation and say `yes` when PM ask you to update.
 
 ## Shells
 Available shells are:
