@@ -464,7 +464,7 @@ pm () {
         while read line
         do
           el=("${(@s/:/)line}") # @ modifier
-          if [[ $el[1] == $NAME ]]; then
+          if [[ $line == "$NAME:"* ]]; then
             PM_PROJ_PATH=$el[2]
           fi
         done < "$PFILE"
