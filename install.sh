@@ -26,8 +26,10 @@ case "$console" in
   'zsh' )
     # Create folder and download file
     cd ~
-    mkdir .pm
-    wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.zsh
+    if [[ ! FROM_UPDATE ]]; then
+      mkdir .pm
+    fi
+    wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.zsh
     mv pm.zsh .pm
 
     # Add the function to the console
@@ -43,11 +45,8 @@ case "$console" in
       echo "# end PM" >> .zshrc
     fi
 
-    # Reload the source
-    source ~/.pm/pm.zsh
-
-    # Ok!
-    pm ready
+    # Done
+    echo "PM is updated! Please, restart your session."
   ;;
 
   *)
