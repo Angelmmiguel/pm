@@ -4,7 +4,9 @@
 # Script to install pm in your system! Only execute and see the magic ;)
 #
 
-FROM_UPDATE=false
+FROM_UPDATE="no"
+
+echo "Hello! I'm here to help you to install PM"
 
 if [ -d ~/.pm ]; then
   # Is installed!
@@ -13,7 +15,7 @@ if [ -d ~/.pm ]; then
 
   if [ "$update" == "yes" ]; then
     echo "Updating PM..."
-    FROM_UPDATE=true
+    FROM_UPDATE="yes"
   else
     exit 0
   fi
@@ -26,14 +28,14 @@ case "$console" in
   'zsh' )
     # Create folder and download file
     cd ~
-    if [[ ! FROM_UPDATE ]]; then
+    if [[ "$FROM_UPDATE" == "no" ]]; then
       mkdir .pm
     fi
     wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.zsh
     mv pm.zsh .pm
 
     # Add the function to the console
-    if [[ ! FROM_UPDATE ]]; then
+    if [[ "$FROM_UPDATE" == "no" ]]; then
       echo "" >> .zshrc
       echo "# PM functions" >> .zshrc
       echo "source ~/.pm/pm.zsh" >> .zshrc
@@ -46,7 +48,11 @@ case "$console" in
     fi
 
     # Done
-    echo "PM is updated! Please, restart your session."
+    if [[ "$FROM_UPDATE" == "yes" ]]; then
+      echo "PM is updated! Please, restart your session."
+    else
+      echo "PM is installed! Please, restart your session."
+    fi
   ;;
 
   *)

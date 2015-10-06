@@ -301,10 +301,10 @@ pm () {
     echo "$branch"
   }
 
-  # Update process of project! :D
-  pm_update_process
   # Initialize folders and file if isn't exists
   pm_initialize
+  # Update process of project! :D
+  pm_update_process
 
   # Check commands. Available commands are add|remove|go (go by default)
   if [ $# -lt 1 ]; then
