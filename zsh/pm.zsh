@@ -247,17 +247,17 @@ pm () {
   get_config_project_value () {
     # Find the project
     local project=$1
-    local in_project=false
+    local in_project="no"
     local value=""
 
     # Read config paramteres
     while read line
     do
       if [[ $line == "$1:"* ]]; then
-        in_project=true
+        in_project="yes"
       elif [[ $line == "/$1"* ]]; then
-        in_project=false
-      elif [[ (in_project) ]]; then
+        in_project="no"
+      elif [[ "$in_project" == "yes" ]]; then
         config=("${(s/=/)line}")
         if [[ $config[1] == "$2" ]]; then
           value=$config[2]
