@@ -426,6 +426,10 @@ pm () {
           echo "The project ${NAME} was deleted!"
         fi
         ;;
+      # Show version
+      'version' | 'v' )
+          echo "$CURRENT_MAJOR.$CURRENT_MINOR.$CURRENT_PATCH"
+        ;;
       # Go to the project
       'go' | 'g' )
         # Path of the project
@@ -478,6 +482,9 @@ pm () {
             eval $exe_after_project
           fi
         fi
+        ;;
+      * )
+        echo "The action $1 doesn't exist"
         ;;
     esac
   fi
