@@ -70,6 +70,27 @@ pm () {
   }
 
   #
+  # Show the help of the project
+  #
+  show_help () {
+    echo "PM is a simple project manager. You can switch to your projects faster"
+    echo "and perform some actions."
+    echo ""
+    echo "Usage:"
+    echo "   pm <add|config|config-project|help|go|list|remove|version>"
+    echo ""
+    echo "Commands:"
+    echo "   add \t\t\t Add a new project based on current path"
+    echo "   config \t\t Change global configuration parameters"
+    echo "   config-project \t Change the configuration of a project"
+    echo "   help \t\t Show this help"
+    echo "   go \t\t\t Switch to a project"
+    echo "   list \t\t Show a list of stored projects"
+    echo "   remove \t\t Remove the project from PM"
+    echo "   version \t\t Show current version"
+  }
+
+  #
   # Save the current version in Version file
   #
   # $1 : String with current version of pm
@@ -287,9 +308,12 @@ pm () {
 
   # Check commands. Available commands are add|remove|go (go by default)
   if [ $# -lt 1 ]; then
-    echo "Usage: pm <add|remove|go|list|config|config-project> <name of project>"
+    show_help
   else
     case "$1" in
+      'help' )
+        show_help
+        ;;
       'ready' )
         echo "PM is available in your console. Enjoy ;)"
         ;;
@@ -485,6 +509,8 @@ pm () {
         ;;
       * )
         echo "The action $1 doesn't exist"
+        echo ""
+        show_help
         ;;
     esac
   fi
