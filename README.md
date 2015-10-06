@@ -1,5 +1,5 @@
 # pm
-The easy way to switch to your projects on ZSH. Add your projects to `pm`and switch between them with a command. 
+The easy way to switch to your projects on Shell. Add your projects to `pm` and switch between them with a command. 
 
 ## Installation
 To install the program, download the installer and execute it.
@@ -68,6 +68,7 @@ pm config <add|get|remove> <parameter> (value)
 
 Available config parameters:
 * `after-all` : execute this command after switch to a project with `pm go`.
+* `git-info` : show a resume of Git for all projects.
 
 For example, you can open Sublime Text on a project when `go` to it:
 
@@ -85,6 +86,7 @@ pm config-project <project> <add|get|remove> <parameter> (value)
 
 Available config parameters:
 * `after` : execute this command after switch to the project with `pm go`.
+* `git-info` : show a resume of Git for a project.
 
 For example, you can start [Gulp](http://gulpjs.com/) in a project when `go` to it:
 

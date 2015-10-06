@@ -15,9 +15,9 @@ pm () {
   # Base
   PM_BASE=~/.pm
   # Available config values
-  AVAILABLE_CONFIG=(after-all)
+  AVAILABLE_CONFIG=(after-all git-info)
   # Available config values for project
-  AVAILABLE_PROJECT_CONFIG=(after)
+  AVAILABLE_PROJECT_CONFIG=(after git-info)
 
   #
   # Initialize projects files
@@ -270,6 +270,16 @@ pm () {
     echo "$config_value"
   }
 
+  #
+  # Get Git branch of current project
+  #
+  get_branch () {
+    branch=$(git branch | grep "*")
+    branch=("${(@s/ /)branch}")
+    branch=$branch[2]
+    echo "$branch"
+  }
+
   # Update process of project! :D
   pm_update_process
   # Initialize folders and file if isn't exists
@@ -440,7 +450,26 @@ pm () {
           echo "Current project: ${NAME}"
           # Execute after all config if it exists
           exe_after=$(get_config_value "after-all")
+          exe_git_info=$(get_config_value "git-info")
           exe_after_project=$(get_config_project_value $NAME "after")
+          exe_git_info_project=$(get_config_project_value $NAME "git-info")
+          
+          if [[ "$exe_git_info_project" == "yes" || "$exe_git_info" == "yes" ]]; then
+            if ! type "git" > /dev/null 2>&1; then
+              echo "You have active Git-info option, but you haven't got Git installed."
+            elif [[ -d .git ]]; then
+              branch=$(get_branch)
+              echo "------------"
+              echo "Branch:\t\t $branch"
+              last_commit=$(git log -1 --format="(%h) %B")
+              echo "Last commit:\t $last_commit"
+              echo "Changes:"
+              git status -s
+              echo "------------"
+            fi
+          fi
+
+          # Exec after
           if [[ "$exe_after" != "" ]]; then
             eval $exe_after
           fi
