@@ -8,10 +8,10 @@ pm () {
   CFILE=~/.pm/config
   # Version File
   VFILE=~/.pm/version
-  CURRENT_VERSION=0.2.0rc
+  CURRENT_VERSION=0.2.0
   CURRENT_MAJOR=0
   CURRENT_MINOR=2
-  CURRENT_PATCH=0rc
+  CURRENT_PATCH=0
   # Base
   PM_BASE=~/.pm
   # Available config values
@@ -73,8 +73,8 @@ pm () {
   # Show the help of the project
   #
   show_help () {
-    echo "PM is a simple project manager. You can switch to your projects faster"
-    echo "and perform some actions."
+    echo "PM is a simple project manager. Switch to your projects faster"
+    echo "and improve your productivity."
     echo ""
     echo "Usage:"
     echo "   pm <add|config|config-project|help|go|list|remove|version>"
