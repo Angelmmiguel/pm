@@ -68,7 +68,7 @@ pm config <add|get|remove> <parameter> (value)
 
 Available config parameters:
 * `after-all` : execute this command after switch to a project with `pm go`.
-* `git-info` : show a resume of Git for all projects.
+* `git-info` : show a resume of Git when `go` to a project.
 
 For example, you can open Sublime Text on a project when `go` to it:
 
@@ -86,7 +86,7 @@ pm config-project <project> <add|get|remove> <parameter> (value)
 
 Available config parameters:
 * `after` : execute this command after switch to the project with `pm go`.
-* `git-info` : show a resume of Git for a project.
+* `git-info` : show a resume of Git status.
 
 For example, you can start [Gulp](http://gulpjs.com/) in a project when `go` to it:
 
