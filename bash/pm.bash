@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 # Use a function to perform a cd command
 pm () {
@@ -52,10 +52,10 @@ pm () {
       MINOR=1
     else
       version_file=$(head -n 1 $VFILE)
-      version=("${(@s/./)version_file}")
-      MAJOR=$version[1]
-      MINOR=$version[2]
-      PATCH=$version[3]
+      version=(${version_file//./ })
+      MAJOR=${version[0]}
+      MINOR=${version[1]}
+      PATCH=${version[2]}
       # Check if this version is a release candidate
       if [[ "$PATCH" =~ rc ]]; then
         RC=true
@@ -73,21 +73,21 @@ pm () {
   # Show the help of the project
   #
   show_help () {
-    echo "PM is a simple project manager. Switch to your projects faster"
-    echo "and improve your productivity."
-    echo ""
-    echo "Usage:"
-    echo "   pm <add|config|config-project|help|go|list|remove|version>"
-    echo ""
-    echo "Commands:"
-    echo "   add \t\t\t Add a new project based on current path"
-    echo "   config \t\t Change global configuration parameters"
-    echo "   config-project \t Change the configuration of a project"
-    echo "   help \t\t Show this help"
-    echo "   go \t\t\t Switch to a project"
-    echo "   list \t\t Show a list of stored projects"
-    echo "   remove \t\t Remove the project from PM"
-    echo "   version \t\t Show current version"
+    echo -e "PM is a simple project manager. Switch to your projects faster"
+    echo -e "and improve your productivity."
+    echo -e ""
+    echo -e "Usage:"
+    echo -e "   pm <add|config|config-project|help|go|list|remove|version>"
+    echo -e ""
+    echo -e "Commands:"
+    echo -e "   add \t\t\t Add a new project based on current path"
+    echo -e "   config \t\t Change global configuration parameters"
+    echo -e "   config-project \t Change the configuration of a project"
+    echo -e "   help \t\t Show this help"
+    echo -e "   go \t\t\t Switch to a project"
+    echo -e "   list \t\t Show a list of stored projects"
+    echo -e "   remove \t\t Remove the project from PM"
+    echo -e "   version \t\t Show current version"
   }
 
   #
@@ -112,8 +112,8 @@ pm () {
     while read line
     do
       if [[ $line =~ ^.*:.* ]]; then
-        el=("${(@s/:/)line}") # : modifier
-        current_projects+=$el[1]
+        el=(${line//:/ })
+        current_projects+=${el[0]}
       fi
     done < "$PFILE"
 
@@ -191,13 +191,14 @@ pm () {
   add_config_to_project () {
     # Project
     local project=$1
-    
+    echo ${3}
+
     # Delete the project property if exist
     delete_project_property $1 $2
 
     # Add the config
     sed -i '' "/$1:.*/a\\
-               $2=$3\\
+               $2=${3}\\
               " $PFILE
   }
 
@@ -222,8 +223,8 @@ pm () {
       elif [[ $line == "/$1"* ]]; then
         in_project=false
       elif [[ (in_project) ]]; then
-        config=("${(s/=/)line}")
-        if [[ $config[1] == "$2" ]]; then
+        config=(${line//=/ })
+        if [[ "x${config[0]}" == "x$2" ]]; then
           delete=$(($index + 1))
         fi
       fi
@@ -253,18 +254,28 @@ pm () {
     # Read config paramteres
     while read line
     do
-      if [[ $line == "$1:"* ]]; then
+      if [[ "$in_project" == "yes" ]]; then
+        config=(${line//=/ })
+        if [[ "x${config[0]}" == "x$2" ]]; then
+          tlen=${#config[@]}
+          # We need to iterate because we are using line substitution to
+          # create an array of elements. So, when the config value has spaces,
+          # we must add all the command to the output
+          if [[ tlen -eq 2 ]]; then
+            value="${config[1]}"
+          else
+            for (( i=1; i<${tlen}; i++ ));
+            do
+              value="${value} ${config[i]}"
+            done
+          fi
+        fi
+      elif  [[ $line == "$1:"* ]]; then
         in_project="yes"
       elif [[ $line == "/$1"* ]]; then
         in_project="no"
-      elif [[ "$in_project" == "yes" ]]; then
-        config=("${(s/=/)line}")
-        if [[ $config[1] == "$2" ]]; then
-          value=$config[2]
-        fi
       fi
     done < "$PFILE"
-
     # Return the value
     echo "$value"
   }
@@ -281,10 +292,20 @@ pm () {
     local config_value=""
     while read line
     do
-      el=("${(@s/=/)line}") # @ modifier
-      if [[ $el[1] == $1 ]]; then
-        # Return the value
-        config_value=$el[2]
+      el=(${line//=/ })
+      if [[ "x${el[0]}" == "x$1" ]]; then
+        tlen=${#el[@]}
+        # We need to iterate because we are using line substitution to
+        # create an array of elements. So, when the config value has spaces,
+        # we must add all the command to the output
+        if [[ tlen -eq 2 ]]; then
+          config_value="${el[1]}"
+        else
+          for (( i=1; i<${tlen}; i++ ));
+          do
+            config_value="${config_value} ${el[i]}"
+          done
+        fi
       fi
     done < "$CFILE"
     # Return the value
@@ -296,8 +317,8 @@ pm () {
   #
   get_branch () {
     branch=$(git branch | grep "*")
-    branch=("${(@s/ /)branch}")
-    branch=$branch[2]
+    branch=(${branch// / })
+    branch=${branch[1]}
     echo "$branch"
   }
 
@@ -323,7 +344,7 @@ pm () {
         NAME="$2"
         # Check if project exist
         project=$(check_project $2)
-        if [[ "$project" == "no" ]]; then
+        if [[ "x$project" == "xno" ]]; then
           PM_PROJ_PATH=$(pwd)
 
           # Add it to the file
@@ -335,9 +356,9 @@ pm () {
         ;;
       # Add a config valeu to the program
       'config' )
-        if [[ $2 == "add" ]]; then
+        if [[ "x$2" == "xadd" ]]; then
           # Add a new config parameter
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ "${AVAILABLE_CONFIG[@]}" =~ "$3" ]]; then
             # Delete the line and save new command
             delete_line_starts "$3=" $CFILE
             echo "$3=$4" >> $CFILE
@@ -347,7 +368,7 @@ pm () {
           fi
         elif [[ $2 == "remove" ]]; then
           # Remove the element
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ "${AVAILABLE_CONFIG[@]}" =~ "$3" ]]; then
             # Delete the line and save new command
             delete_line_starts "$3=" $CFILE
             echo "The configuration parameter $3 has been updated"
@@ -356,7 +377,7 @@ pm () {
           fi
         elif [[ $2 == "get" ]]; then
           # Show the value of element
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ "${AVAILABLE_CONFIG[@]}" =~ "$3" ]]; then
             # Delete the line and save new command
             config_value=$(get_config_value "$3")
             echo "The configuration value for $3 is: $config_value"
@@ -375,15 +396,15 @@ pm () {
           # Continue
           if [[ $3 == "add" ]]; then
             # Add a new config parameter
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
-              add_config_to_project $2 $4 $5
+            if [[ "${AVAILABLE_PROJECT_CONFIG[@]}" =~ "$4" ]]; then
+              add_config_to_project "$2" "$4" "$5"
               echo "The configuration has been updated"
             else
               echo "The config parameter $4 doesn't exist"
             fi
           elif [[ $3 == "remove" ]]; then
             # Remove the element
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+            if [[ "${AVAILABLE_PROJECT_CONFIG[@]}" =~ "$4" ]]; then
               # Delete the config for the project
               delete_project_property $2 $4
               echo "The configuration parameter $4 has been removed"
@@ -392,7 +413,7 @@ pm () {
             fi
           elif [[ $3 == "get" ]]; then
             # Show the value of element
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+            if [[ "${AVAILABLE_PROJECT_CONFIG[@]}" =~ "$4" ]]; then
               # Get the config value of a project
               value=$(get_config_project_value $2 $4)
               if [[ "x$value" == "x" ]]; then
@@ -415,10 +436,10 @@ pm () {
         while read line
         do
           if [[ $line =~ ^.*:.* ]]; then
-            el=("${(@s/:/)line}") # : modifier
+            el=(${line//:/ })
             in_project=true
-            last_project=$el[1]
-            echo $el[1]
+            last_project=${el[0]}
+            echo ${el[0]}
           fi
         done < "$PFILE"
         ;;
@@ -463,9 +484,9 @@ pm () {
         # Read lines
         while read line
         do
-          el=("${(@s/:/)line}") # @ modifier
+          el=(${line//:/ })
           if [[ $line == "$NAME:"* ]]; then
-            PM_PROJ_PATH=$el[2]
+            PM_PROJ_PATH=${el[1]}
           fi
         done < "$PFILE"
 
@@ -479,7 +500,7 @@ pm () {
           # Execute after all config if it exists
           exe_after=$(get_config_value "after-all")
           exe_git_info=$(get_config_value "git-info")
-          exe_after_project=$(get_config_project_value $NAME "after")
+          exe_after_project=$(get_config_project_value "$NAME" "after")
           exe_git_info_project=$(get_config_project_value $NAME "git-info")
           
           if [[ "$exe_git_info_project" == "yes" || "$exe_git_info" == "yes" ]]; then
@@ -488,9 +509,9 @@ pm () {
             elif [[ -d .git ]]; then
               branch=$(get_branch)
               echo "------------"
-              echo "Branch:\t\t $branch"
+              echo -e "Branch:\t\t $branch"
               last_commit=$(git log -1 --format="(%h) %B")
-              echo "Last commit:\t $last_commit"
+              echo -e "Last commit:\t $last_commit"
               echo "Changes:"
               git status -s
               echo "------------"

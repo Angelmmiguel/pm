@@ -21,7 +21,7 @@ if [ -d ~/.pm ]; then
   fi
 fi
 # Check the current console.
-printf "What's your shell? [ zsh ]: "
+printf "What's your shell? [ zsh, bash ]: "
 read console
 
 case "$console" in
@@ -45,6 +45,35 @@ case "$console" in
       echo "alias pmrm=\"pm remove\"" >> .zshrc
       echo "alias pml=\"pm list\"" >> .zshrc
       echo "# end PM" >> .zshrc
+    fi
+
+    # Done
+    if [[ "$FROM_UPDATE" == "yes" ]]; then
+      echo "PM is updated! Please, restart your session."
+    else
+      echo "PM is installed! Please, restart your session."
+    fi
+  ;;
+  'bash' )
+    # Create folder and download file
+    cd ~
+    if [[ "$FROM_UPDATE" == "no" ]]; then
+      mkdir .pm
+    fi
+    wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/master/bash/pm.bash
+    mv pm.bash .pm
+
+    # Add the function to the console
+    if [[ "$FROM_UPDATE" == "no" ]]; then
+      echo "" >> .bash_profile
+      echo "# PM functions" >> .bash_profile
+      echo "source ~/.pm/pm.zsh" >> .bash_profile
+      # Add some aliases
+      echo "alias pma=\"pm add\"" >> .bash_profile
+      echo "alias pmg=\"pm go\"" >> .bash_profile
+      echo "alias pmrm=\"pm remove\"" >> .bash_profile
+      echo "alias pml=\"pm list\"" >> .bash_profile
+      echo "# end PM" >> .bash_profile
     fi
 
     # Done
