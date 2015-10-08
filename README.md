@@ -14,7 +14,7 @@ chmod 755 ./install.sh
 Type your shell when the installer ask to you:
 
 ```zsh
-What is your shell? [ zsh ]: 
+What is your shell? [ zsh, bash ]: 
 ```
 
 ### Update PM
@@ -24,6 +24,7 @@ To update PM, run same process than installation and say `yes` when PM ask you t
 ## Shells
 Available shells are:
 * ZSH
+* Bash (Prerelase)
 
 ## Usage
 Move to your awesome project and add it to `pm`:

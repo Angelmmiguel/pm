@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Prerelease]
+
+- First version of PM for bash!
+- Fixed an error that always return after-all values on `pm config get *`
+
 ## [v0.2] 06-10-2015
 
 - Additional help added.
