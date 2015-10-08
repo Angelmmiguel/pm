@@ -24,7 +24,7 @@ To update PM, run same process than installation and say `yes` when PM ask you t
 ## Shells
 Available shells are:
 * ZSH
-* Bash (Prerelase)
+* Bash (Prerelease)
 
 ## Usage
 Move to your awesome project and add it to `pm`:
