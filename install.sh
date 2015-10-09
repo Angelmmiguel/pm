@@ -28,14 +28,14 @@ case "$console" in
   'zsh' )
     # Create folder and download file
     cd ~
-    if [[ "$FROM_UPDATE" == "no" ]]; then
+    if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
     wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/master/zsh/pm.zsh
     mv pm.zsh .pm
 
     # Add the function to the console
-    if [[ "$FROM_UPDATE" == "no" ]]; then
+    if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .zshrc
       echo "# PM functions" >> .zshrc
       echo "source ~/.pm/pm.zsh" >> .zshrc
@@ -48,7 +48,7 @@ case "$console" in
     fi
 
     # Done
-    if [[ "$FROM_UPDATE" == "yes" ]]; then
+    if [ "$FROM_UPDATE" = "yes" ]; then
       echo "PM is updated! Please, restart your session."
     else
       echo "PM is installed! Please, restart your session."
@@ -57,17 +57,17 @@ case "$console" in
   'bash' )
     # Create folder and download file
     cd ~
-    if [[ "$FROM_UPDATE" == "no" ]]; then
+    if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
     wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/master/bash/pm.bash
     mv pm.bash .pm
 
     # Add the function to the console
-    if [[ "$FROM_UPDATE" == "no" ]]; then
+    if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .bash_profile
       echo "# PM functions" >> .bash_profile
-      echo "source ~/.pm/pm.zsh" >> .bash_profile
+      echo "source ~/.pm/pm.bash" >> .bash_profile
       # Add some aliases
       echo "alias pma=\"pm add\"" >> .bash_profile
       echo "alias pmg=\"pm go\"" >> .bash_profile
@@ -77,7 +77,7 @@ case "$console" in
     fi
 
     # Done
-    if [[ "$FROM_UPDATE" == "yes" ]]; then
+    if [ "$FROM_UPDATE" = "yes" ]; then
       echo "PM is updated! Please, restart your session."
     else
       echo "PM is installed! Please, restart your session."
