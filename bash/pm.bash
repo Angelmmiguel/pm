@@ -118,9 +118,7 @@ pm () {
     done < "$PFILE"
 
     for i in $current_projects; do
-      sed -i '' "/$i:.*/a\\
-                 /$i\\
-                " $PFILE
+      sed -i "/$i:.*/ a /$i" $PFILE
     done
   }
 
@@ -197,9 +195,7 @@ pm () {
     delete_project_property $1 $2
 
     # Add the config
-    sed -i '' "/$1:.*/a\\
-               $2=${3}\\
-              " $PFILE
+    sed -i "/$1:.*/ a $2=${3}" $PFILE
   }
 
   #
@@ -349,7 +345,7 @@ pm () {
 
           # Add it to the file
           echo "$NAME:$PM_PROJ_PATH" >> $PFILE
-          echo "\\$NAME" >> $PFILE
+          echo "/$NAME" >> $PFILE
         else
           echo "The project $NAME already exists"
         fi
@@ -454,9 +450,9 @@ pm () {
         # Read all lines
         while read line
         do
-          if [[ $line == "$NAME:"* ]]; then
+          if [[ $line =~ ^$NAME*:.* ]]; then
             PM_DELETE_INITIAL=$PM_INDEX
-          elif [[ $line == "/$NAME" ]]; then
+          elif [[ $line =~ ^/$NAME$ ]]; then
             PM_DELETE_FINAL=$PM_INDEX
           fi
           PM_INDEX=$(($PM_INDEX + 1))

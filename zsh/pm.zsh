@@ -328,7 +328,7 @@ pm () {
 
           # Add it to the file
           echo "$NAME:$PM_PROJ_PATH" >> $PFILE
-          echo "\\$NAME" >> $PFILE
+          echo "/$NAME" >> $PFILE
         else
           echo "The project $NAME already exists"
         fi
