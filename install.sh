@@ -89,7 +89,7 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash)
     mv pm.bash .pm
 
     # Add the function to the console
