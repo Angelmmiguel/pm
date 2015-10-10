@@ -189,7 +189,6 @@ pm () {
   add_config_to_project () {
     # Project
     local project=$1
-    echo ${3}
 
     # Delete the project property if exist
     delete_project_property $1 $2
