@@ -8,7 +8,18 @@ To install the program, download the installer and execute it.
 cd ~
 wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/install.sh
 chmod 755 ./install.sh
+```
+
+If you want to install last stable version, only run downloaded script:
+
+```zsh
 ./install.sh
+```
+
+If you want to install latest development version, run the installer with `--prerelease` option: 
+
+```zsh
+./install.sh --prerelease
 ```
 
 Type your shell when the installer ask to you:
@@ -24,7 +35,7 @@ To update PM, run same process than installation and say `yes` when PM ask you t
 ## Shells
 Available shells are:
 * ZSH
-* Bash (Prerelease)
+* Bash (Prerelease, you need to run installer with `--prerelease` option)
 
 ## Usage
 Move to your awesome project and add it to `pm`:
