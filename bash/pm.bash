@@ -8,10 +8,10 @@ pm () {
   CFILE=~/.pm/config
   # Version File
   VFILE=~/.pm/version
-  CURRENT_VERSION=0.2.0
+  CURRENT_VERSION=0.3.0rc
   CURRENT_MAJOR=0
-  CURRENT_MINOR=2
-  CURRENT_PATCH=0
+  CURRENT_MINOR=3
+  CURRENT_PATCH=0rc
   # Base
   PM_BASE=~/.pm
   # Available config values

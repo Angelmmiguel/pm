@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Prerelease]
 
+- Fixed a bug when create a project. PM doesn't add the correct end tag in projects file.
+- Fixed some bugs with `sed` syntax on Bash version.
 - First version of PM for bash!
 - Fixed an error that always return after-all values on `pm config get *`
 
