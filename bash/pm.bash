@@ -188,7 +188,11 @@ pm () {
   #
   add_config_to_project () {
     # Project
-    local project=$1
+    if [ -z $1 ]; then
+        local project=$(basename $(pwd))
+    else
+        local project=$1
+    fi
 
     # Delete the project property if exist
     delete_project_property $1 $2
@@ -336,9 +340,13 @@ pm () {
       # Add a project
       'add' | 'a' )
         # Name of the project
-        NAME="$2"
+        if [ -z $2 ]; then
+            NAME=$(basename $(pwd))
+        else
+            NAME="$2"
+        fi
         # Check if project exist
-        project=$(check_project $2)
+        project=$(check_project $NAME)
         if [[ "x$project" == "xno" ]]; then
           PM_PROJ_PATH=$(pwd)
 

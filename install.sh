@@ -5,14 +5,14 @@
 #
 
 FROM_UPDATE="no"
-VERSION="v0.2"
+VERSION="v0.3"
 PRERELEASE="no"
 
 #
 # Show a message that selected shell is not currently available.
 #
 shell_not_available () {
-  echo "Now, your console isn't available :(. Create an issue on: https://github.com/Angelmmiguel/pm/issues."
+  echo "Now, your console isn't available :(. Create an issue on: https://github.com/ygmpkk/pm/issues."
 }
 
 # Check if requested version is a prerelease
@@ -55,7 +55,7 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
+    $(wget --quiet https://raw.githubusercontent.com/ygmpkk/pm/${VERSION}/zsh/pm.zsh)
     mv pm.zsh .pm
 
     # Add the function to the console
@@ -89,7 +89,7 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash)
+    $(wget --quiet https://raw.githubusercontent.com/ygmpkk/pm/${VERSION}/bash/pm.bash)
     mv pm.bash .pm
 
     # Add the function to the console
