@@ -8,9 +8,9 @@ pm () {
   CFILE=~/.pm/config
   # Version File
   VFILE=~/.pm/version
-  CURRENT_VERSION=0.3.0rc
+  CURRENT_VERSION=0.4.0rc
   CURRENT_MAJOR=0
-  CURRENT_MINOR=3
+  CURRENT_MINOR=4
   CURRENT_PATCH=0rc
   # Base
   PM_BASE=~/.pm
@@ -190,11 +190,7 @@ pm () {
   #
   add_config_to_project () {
     # Project
-    if [ -z $1 ]; then
-        local project=$(basename $(pwd))
-    else
-        local project=$1
-    fi
+    local project=$1
     
     # Delete the project property if exist
     delete_project_property $1 $2

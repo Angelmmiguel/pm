@@ -1,0 +1,38 @@
+#compdef pm
+
+local -a _lst_arguments
+
+_lst_arguments=(
+    "add:Add specified project"
+    "list:List projects"
+    "remove:Remove the project"
+    "config:Configurate <add|get|remove> <parameter> (value), e.g pm config add after-all \"sublime .\""
+    "config-project:Configurate for specified <project> add|get|remove <parameter> (value), e.g pm config-project myproject add after \"gulp\""
+    "go:Go to specified project"
+)
+
+local label_subcommand="pm help"
+
+if ((CURRENT == 2)); then
+    _describe -t commands "$label_subcommand" _lst_arguments
+    return 0
+fi
+
+local expl
+
+case "$words[2]" in
+    go|remove|config-project)
+        declare -a projects
+        projects=($(pm list | awk 'NR>1{print $1}'| sed 's/:/\\:/g'))
+        _describe 'go' projects
+        ;;
+    config)
+        declare -a subcommand
+        subcommand=(
+            "add:Add config <after-all> <value>"
+            "get:Get config <value>"
+            "remove:Remove config <value>"
+        )
+        _describe 'config' subcommand
+        ;;
+esac

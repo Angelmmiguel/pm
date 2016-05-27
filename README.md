@@ -106,6 +106,10 @@ For example, you can start [Gulp](http://gulpjs.com/) in a project when `go` to 
 pm config-project myproject add after "gulp"
 ```
 
+# Zsh auto-complete
+
+Add it to `plugins=(pm)` in your `~/.zshrc`
+
 # Example
 
 ![Example of PM in a gif](https://raw.githubusercontent.com/ygmpkk/pm/master/pm.gif)
