@@ -196,9 +196,7 @@ pm () {
     delete_project_property $1 $2
 
     # Add the config
-    sed -i '' "/$1:.*/a\\
-               $2=$3\\
-              " $PFILE
+    sed -i "/$1:.*/a\\$2=$3\\" $PFILE
   }
 
   #

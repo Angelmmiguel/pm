@@ -23,7 +23,7 @@ local expl
 case "$words[2]" in
     go|remove|config-project)
         declare -a projects
-        projects=($(pm list | awk 'NR>1{print $1}'| sed 's/:/\\:/g'))
+        projects=($(pm list | awk '{print $1}'| sed 's/:/\\:/g'))
         _describe 'go' projects
         ;;
     config)
