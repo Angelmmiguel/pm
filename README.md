@@ -6,7 +6,7 @@ To install the program, download the installer and execute it.
 
 ```zsh
 cd ~
-wget https://raw.githubusercontent.com/ygmpkk/pm/master/install.sh
+wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/install.sh
 chmod 755 ./install.sh
 ```
 
@@ -112,7 +112,7 @@ Add it to `plugins=(pm)` in your `~/.zshrc`
 
 # Example
 
-![Example of PM in a gif](https://raw.githubusercontent.com/ygmpkk/pm/master/pm.gif)
+![Example of PM in a gif](https://raw.githubusercontent.com/Angelmmiguel/pm/master/pm.gif)
 
 # Contribute
 
