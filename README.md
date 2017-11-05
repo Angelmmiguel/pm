@@ -108,7 +108,17 @@ pm config-project myproject add after "gulp"
 
 # Zsh auto-complete
 
-Add it to `plugins=(pm)` in your `~/.zshrc`
+If you use oh-my-zsh, you can use add `pm` to your `plugins`
+array in your `~/.zshrc`:
+
+```zsh
+plugins=(pm)
+```
+
+If you don't use this configuration framework, you can put the `_pm` file
+in a folder in your $fpath array.
+
+The folder /usr/local/share/zsh/site-functions/ is a good place for that.
 
 # Example
 
