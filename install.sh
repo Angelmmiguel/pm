@@ -5,7 +5,7 @@
 #
 
 FROM_UPDATE="no"
-VERSION="v0.2"
+VERSION="v0.4"
 PRERELEASE="no"
 
 #
@@ -52,11 +52,17 @@ case "$console" in
   'zsh' )
     # Create folder and download file
     cd ~
+    mkdir -p $ZSH_CUSTOM/plugins/pm
+
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir .pm
     fi
+
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
     mv pm.zsh .pm
+
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm)
+    mv _pm $ZSH_CUSTOM/plugins/pm/_pm
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then

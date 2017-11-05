@@ -8,9 +8,9 @@ pm () {
   CFILE=~/.pm/config
   # Version File
   VFILE=~/.pm/version
-  CURRENT_VERSION=0.3.0rc
+  CURRENT_VERSION=0.4.0rc
   CURRENT_MAJOR=0
-  CURRENT_MINOR=3
+  CURRENT_MINOR=4
   CURRENT_PATCH=0rc
   # Base
   PM_BASE=~/.pm
@@ -196,9 +196,7 @@ pm () {
     delete_project_property $1 $2
 
     # Add the config
-    sed -i '' "/$1:.*/a\\
-               $2=$3\\
-              " $PFILE
+    sed -i "/$1:.*/a\\$2=$3\\" $PFILE
   }
 
   #
@@ -320,9 +318,13 @@ pm () {
       # Add a project
       'add' | 'a' )
         # Name of the project
-        NAME="$2"
+        if [ -z $2 ]; then
+            NAME=$(basename $(pwd))
+        else
+            NAME="$2"
+        fi
         # Check if project exist
-        project=$(check_project $2)
+        project=$(check_project $NAME)
         if [[ "$project" == "no" ]]; then
           PM_PROJ_PATH=$(pwd)
 
