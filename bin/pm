@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-require 'pmanager'
-
-# Init THOR!
-Pmanager::CLI.start(ARGV)
+project_path=$(pmr path $1)
+cd $project_path

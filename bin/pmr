@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'pmanager'
+
+# Init THOR!
+Pmanager::CLI.start(ARGV)

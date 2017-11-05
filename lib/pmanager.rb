@@ -1,4 +1,7 @@
 require 'pmanager/version'
+require 'pmanager/projects'
+
+# CLI
 require 'pmanager/cli'
 
 #

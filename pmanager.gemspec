@@ -3,7 +3,7 @@ require File.expand_path('../lib/pmanager/version', __FILE__)
 Gem::Specification.new do |s|
   s.name        = 'pmanager'
   s.version     = Pmanager::VERSION
-  s.executables << 'pm'
+  s.executables = ['pm', 'pmr']
   s.summary     = 'The easy way to switch to your projects on the shell'
   s.description = 'The easy way to switch to your projects on the shell'
   s.authors     = ['Angel M Miguel']
