@@ -1,5 +1,5 @@
 # pm
-The easy way to switch to your projects on Shell. Add your projects to `pm` and switch between them with a command. 
+The easy way to switch to your projects on Shell. Add your projects to `pm` and switch between them with a command.
 
 ## Installation
 To install the program, download the installer and execute it.
@@ -13,10 +13,10 @@ chmod 755 ./install.sh
 If you want to install last stable version, only run downloaded script:
 
 ```zsh
-./install.sh
+. ./install.sh
 ```
 
-If you want to install latest development version, run the installer with `--prerelease` option: 
+If you want to install latest development version, run the installer with `--prerelease` option:
 
 ```zsh
 ./install.sh --prerelease
@@ -25,7 +25,7 @@ If you want to install latest development version, run the installer with `--pre
 Type your shell when the installer ask to you:
 
 ```zsh
-What is your shell? [ zsh, bash ]: 
+What is your shell? [ zsh, bash ]:
 ```
 
 ### Update PM
