@@ -101,7 +101,7 @@ pm () {
   save_version () {
     # Create version file
     if [ -f $VFILE  ]; then
-      rm $VFILE
+      rm -f $VFILE
     fi
     # Save the version
     echo "$1" > $VFILE
@@ -127,7 +127,7 @@ pm () {
 
   #
   # Find a line that starts with an string. Return the index
-  # 
+  #
   # $1 : String that start the line
   # $2 : Path to the file
   #
@@ -232,7 +232,7 @@ pm () {
       fi
       index=$(($index + 1))
     done < "$PFILE"
-    
+
     # Check if we need to delete the config
     if [[ $delete -ne 0  ]]; then
       sed -i -e "${delete},1d" $PFILE
@@ -438,7 +438,7 @@ pm () {
         fi
         ;;
       # List projects
-      'list' | 'l' ) 
+      'list' | 'l' )
         while read line
         do
           if [[ $line =~ ^.*:.* ]]; then
@@ -508,7 +508,7 @@ pm () {
           exe_git_info=$(get_config_value "git-info")
           exe_after_project=$(get_config_project_value "$NAME" "after")
           exe_git_info_project=$(get_config_project_value $NAME "git-info")
-          
+
           if [[ "$exe_git_info_project" == "yes" || "$exe_git_info" == "yes" ]]; then
             if ! type "git" > /dev/null 2>&1; then
               echo "You have active Git-info option, but you haven't got Git installed."
