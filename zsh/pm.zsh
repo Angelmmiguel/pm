@@ -101,7 +101,7 @@ pm () {
   save_version () {
     # Create version file
     if [ -f $VFILE  ]; then
-      rm $VFILE
+      rm -f $VFILE
     fi
     # Save the version
     echo "$1" > $VFILE
