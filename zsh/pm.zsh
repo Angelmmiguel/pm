@@ -2,18 +2,21 @@
 
 # Use a function to perform a cd command
 pm () {
-  # Projects file
-  PFILE=~/.pm/projects
-  # Config file
-  CFILE=~/.pm/config
-  # Version File
-  VFILE=~/.pm/version
   CURRENT_VERSION=0.4.0rc
   CURRENT_MAJOR=0
   CURRENT_MINOR=4
   CURRENT_PATCH=0rc
   # Base
-  PM_BASE=~/.pm
+  if [ ! -z "$PM_BASE"]; then
+    PM_BASE=$HOME/.pm
+  fi
+
+  # Projects file
+  PFILE=$PM_BASE/projects
+  # Config file
+  CFILE=$PM_BASE/config
+  # Version File
+  VFILE=$PM_BASE/version
   # Available config values
   AVAILABLE_CONFIG=(after-all git-info)
   # Available config values for project
@@ -25,7 +28,7 @@ pm () {
   pm_initialize () {
     # Create the folder
     if [ ! -d "$PM_BASE" ]; then
-      mkdir ~/.pm
+      mkdir $PM_BASE
     fi
     # Create projects file
     if [ ! -f $PFILE  ]; then
