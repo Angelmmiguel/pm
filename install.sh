@@ -71,7 +71,7 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .zshrc
       echo "# PM functions" >> .zshrc
-      echo "source ~/.pm/pm.zsh" >> .zshrc
+      echo "source $PM_BASE/pm.zsh" >> .zshrc
       # Add some aliases
       echo "alias pma=\"pm add\"" >> .zshrc
       echo "alias pmg=\"pm go\"" >> .zshrc
@@ -104,7 +104,7 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .bash_profile
       echo "# PM functions" >> .bash_profile
-      echo "source ~/.pm/pm.bash" >> .bash_profile
+      echo "source $PM_BASE/pm.bash" >> .bash_profile
       # Add some aliases
       echo "alias pma=\"pm add\"" >> .bash_profile
       echo "alias pmg=\"pm go\"" >> .bash_profile
