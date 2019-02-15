@@ -62,11 +62,11 @@ case "$console" in
       mkdir $PM_PATH
     fi
 
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
-    mv pm.zsh .pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh -o /tmp/pm.zsh)
+    mv /tmp/pm.zsh $PM_PATH
 
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm)
-    mv _pm $ZSH_CUSTOM/plugins/pm/_pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm -o /tmp/_pm)
+    mv /tmp/_pm $ZSH_CUSTOM/plugins/pm/_pm
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then
@@ -99,8 +99,8 @@ case "$console" in
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir $PM_PATH
     fi
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash)
-    mv pm.bash .pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash -o /tmp/pm.bash)
+    mv /tmp/pm.bash $PM_PATH
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then
