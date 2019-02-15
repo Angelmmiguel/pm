@@ -36,6 +36,10 @@ if [ -d ~/.pm ]; then
   fi
 fi
 
+if [ -z $PM_PATH ]; then
+  PM_PATH=$HOME/.pm
+fi
+
 # In this case, Bash is only available in prerelease
 if [ $PRERELEASE = "yes" ]; then
   SHELLS="zsh, bash"
