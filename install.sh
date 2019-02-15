@@ -23,7 +23,11 @@ fi
 
 echo "Hello! I'm here to help you to install PM"
 
-if [ -d ~/.pm ]; then
+if [ -z $PM_BASE ]; then
+  PM_BASE=$HOME/.pm
+fi
+
+if [ -d $PM_BASE ]; then
   # Is installed!
   printf "PM is installed. Update it? [ yes or no ]: "
   read update
@@ -34,10 +38,6 @@ if [ -d ~/.pm ]; then
   else
     exit 0
   fi
-fi
-
-if [ -z $PM_PATH ]; then
-  PM_PATH=$HOME/.pm
 fi
 
 # In this case, Bash is only available in prerelease
@@ -58,11 +58,11 @@ case "$console" in
     mkdir -p $ZSH_CUSTOM/plugins/pm
 
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir $PM_PATH
+      mkdir $PM_BASE
     fi
 
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh -o /tmp/pm.zsh)
-    mv /tmp/pm.zsh $PM_PATH
+    mv /tmp/pm.zsh $PM_BASE
 
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm -o /tmp/_pm)
     mv /tmp/_pm $ZSH_CUSTOM/plugins/pm/_pm
@@ -95,10 +95,10 @@ case "$console" in
     fi
     # Create folder and download file
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir $PM_PATH
+      mkdir $PM_BASE
     fi
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash -o /tmp/pm.bash)
-    mv /tmp/pm.bash $PM_PATH
+    mv /tmp/pm.bash $PM_BASE
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then
