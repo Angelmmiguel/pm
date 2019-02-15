@@ -59,7 +59,7 @@ case "$console" in
     mkdir -p $ZSH_CUSTOM/plugins/pm
 
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir .pm
+      mkdir $PM_PATH
     fi
 
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
@@ -97,7 +97,7 @@ case "$console" in
     # Create folder and download file
     cd ~
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir .pm
+      mkdir $PM_PATH
     fi
     $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash)
     mv pm.bash .pm
