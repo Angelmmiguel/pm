@@ -55,7 +55,6 @@ echo "Installing $VERSION version..."
 case "$console" in
   'zsh' )
     # Create folder and download file
-    cd ~
     mkdir -p $ZSH_CUSTOM/plugins/pm
 
     if [ "$FROM_UPDATE" = "no" ]; then
@@ -95,7 +94,6 @@ case "$console" in
       exit 0
     fi
     # Create folder and download file
-    cd ~
     if [ "$FROM_UPDATE" = "no" ]; then
       mkdir $PM_PATH
     fi
