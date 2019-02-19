@@ -23,7 +23,11 @@ fi
 
 echo "Hello! I'm here to help you to install PM"
 
-if [ -d ~/.pm ]; then
+if [ -z $PM_BASE ]; then
+  PM_BASE=$HOME/.pm
+fi
+
+if [ -d $PM_BASE ]; then
   # Is installed!
   printf "PM is installed. Update it? [ yes or no ]: "
   read update
@@ -51,24 +55,23 @@ echo "Installing $VERSION version..."
 case "$console" in
   'zsh' )
     # Create folder and download file
-    cd ~
     mkdir -p $ZSH_CUSTOM/plugins/pm
 
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir .pm
+      mkdir $PM_BASE
     fi
 
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh)
-    mv pm.zsh .pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/pm.zsh -o /tmp/pm.zsh)
+    mv /tmp/pm.zsh $PM_BASE
 
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm)
-    mv _pm $ZSH_CUSTOM/plugins/pm/_pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/zsh/_pm -o /tmp/_pm)
+    mv /tmp/_pm $ZSH_CUSTOM/plugins/pm/_pm
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .zshrc
       echo "# PM functions" >> .zshrc
-      echo "source ~/.pm/pm.zsh" >> .zshrc
+      echo "source $PM_BASE/pm.zsh" >> .zshrc
       # Add some aliases
       echo "alias pma=\"pm add\"" >> .zshrc
       echo "alias pmg=\"pm go\"" >> .zshrc
@@ -91,18 +94,17 @@ case "$console" in
       exit 0
     fi
     # Create folder and download file
-    cd ~
     if [ "$FROM_UPDATE" = "no" ]; then
-      mkdir .pm
+      mkdir $PM_BASE
     fi
-    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash)
-    mv pm.bash .pm
+    $(wget --quiet https://raw.githubusercontent.com/Angelmmiguel/pm/${VERSION}/bash/pm.bash -o /tmp/pm.bash)
+    mv /tmp/pm.bash $PM_BASE
 
     # Add the function to the console
     if [ "$FROM_UPDATE" = "no" ]; then
       echo "" >> .bash_profile
       echo "# PM functions" >> .bash_profile
-      echo "source ~/.pm/pm.bash" >> .bash_profile
+      echo "source $PM_BASE/pm.bash" >> .bash_profile
       # Add some aliases
       echo "alias pma=\"pm add\"" >> .bash_profile
       echo "alias pmg=\"pm go\"" >> .bash_profile
