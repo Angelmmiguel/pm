@@ -76,21 +76,21 @@ pm () {
   # Show the help of the project
   #
   show_help () {
-    echo "PM is a simple project manager. Switch to your projects faster"
-    echo "and improve your productivity."
-    echo ""
-    echo "Usage:"
-    echo "   pm <add|config|config-project|help|go|list|remove|version>"
-    echo ""
-    echo "Commands:"
-    echo "   add \t\t\t Add a new project based on current path"
-    echo "   config \t\t Change global configuration parameters"
-    echo "   config-project \t Change the configuration of a project"
-    echo "   help \t\t Show this help"
-    echo "   go \t\t\t Switch to a project"
-    echo "   list \t\t Show a list of stored projects"
-    echo "   remove \t\t Remove the project from PM"
-    echo "   version \t\t Show current version"
+    printf "PM is a simple project manager. Switch to your projects faster"
+    printf "and improve your productivity."
+    printf ""
+    printf "Usage:"
+    printf "   pm <add|config|config-project|help|go|list|remove|version>"
+    printf ""
+    printf "Commands:"
+    printf "   add \\t\\t\\t Add a new project based on current path"
+    printf "   config \\t\\t Change global configuration parameters"
+    printf "   config-project \\t Change the configuration of a project"
+    printf "   help \\t\\t Show this help"
+    printf "   go \\t\\t\\t Switch to a project"
+    printf "   list \\t\\t Show a list of stored projects"
+    printf "   remove \\t\\t Remove the project from PM"
+    printf "   version \\t\\t Show current version"
   }
 
   #
@@ -112,15 +112,15 @@ pm () {
   #
   update_0_1_to_0_2 () {
     current_projects=()
-    while read line
+    while read -r line
     do
       if [[ $line =~ ^.*:.* ]]; then
         el=("${(@s/:/)line}") # : modifier
-        current_projects+=$el[1]
+        current_projects+=($el[1])
       fi
     done < "$PFILE"
 
-    for i in $current_projects; do
+    for i in "${current_projects[@]}"; do
       sed -i '' "/$i:.*/a\\
                  /$i\\
                 " $PFILE
@@ -129,7 +129,7 @@ pm () {
 
   #
   # Find a line that starts with an string. Return the index
-  # 
+  #
   # $1 : String that start the line
   # $2 : Path to the file
   #
@@ -138,12 +138,12 @@ pm () {
     local index=1
     local delete=0
     # Read all lines
-    while read line
+    while read -r line
     do
       if [[ $line == "$1"* ]]; then
         delete=$index
       fi
-      index=$(($index + 1))
+      index=$((index + 1))
     done < "$2"
 
     echo "$delete"
@@ -155,7 +155,8 @@ pm () {
   # $1 : name of the project
   #
   check_project () {
-    local project=$(find_line_starts "$1:" $PFILE)
+    local project
+    project=$(find_line_starts "$1:" $PFILE)
 
     # Check if project exist
     if [[ $project -eq 0  ]]; then
@@ -173,13 +174,14 @@ pm () {
   #
   delete_line_starts () {
     # Get the index to delete
-    local delete=$(find_line_starts $1 $2)
+    local delete
+    delete=$(find_line_starts "$1" "$2")
     # Check if the line exist
     if [[ $delete -eq 0  ]]; then
       return 0
     else
       # Delete
-      sed -i -e "${delete},1d" $2
+      sed -i -e "${delete},1d" "$2"
       return 1
     fi
   }
@@ -194,9 +196,9 @@ pm () {
   add_config_to_project () {
     # Project
     local project=$1
-    
+
     # Delete the project property if exist
-    delete_project_property $1 $2
+    delete_project_property "$1" "$2"
 
     # Add the config
     sed -i "/$1:.*/a\\$2=$3\\" $PFILE
@@ -216,7 +218,7 @@ pm () {
     local delete=0
 
     # Read config paramteres
-    while read line
+    while read -r line
     do
       if [[ $line == "$1:"* ]]; then
         in_project=true
@@ -225,12 +227,12 @@ pm () {
       elif [[ (in_project) ]]; then
         config=("${(s/=/)line}")
         if [[ $config[1] == "$2" ]]; then
-          delete=$(($index + 1))
+          delete=$((index + 1))
         fi
       fi
-      index=$(($index + 1))
+      index=$((index + 1))
     done < "$PFILE"
-    
+
     # Check if we need to delete the config
     if [[ $delete -ne 0  ]]; then
       sed -i -e "${delete},1d" $PFILE
@@ -252,7 +254,7 @@ pm () {
     local value=""
 
     # Read config paramteres
-    while read line
+    while read -r line
     do
       if [[ $line == "$1:"* ]]; then
         in_project="yes"
@@ -280,10 +282,10 @@ pm () {
   get_config_value () {
     # Read all lines
     local config_value=""
-    while read line
+    while read -r line
     do
       el=("${(@s/=/)line}") # @ modifier
-      if [[ $el[1] == $1 ]]; then
+      if [[ $el[1] == "$1" ]]; then
         # Return the value
         config_value=$el[2]
       fi
@@ -299,7 +301,7 @@ pm () {
     branch=$(git branch | grep "*")
     branch=("${(@s/ /)branch}")
     branch=$branch[2]
-    echo "$branch"
+    echo "${branch[@]}"
   }
 
   # Initialize folders and file if isn't exists
@@ -321,13 +323,13 @@ pm () {
       # Add a project
       'add' | 'a' )
         # Name of the project
-        if [ -z $2 ]; then
-            NAME=$(basename $(pwd))
+        if [ -z "$2" ]; then
+            NAME=$(basename "$(pwd)")
         else
             NAME="$2"
         fi
         # Check if project exist
-        project=$(check_project $NAME)
+        project=$(check_project "$NAME")
         if [[ "$project" == "no" ]]; then
           PM_PROJ_PATH=$(pwd)
 
@@ -342,7 +344,7 @@ pm () {
       'config' )
         if [[ $2 == "add" ]]; then
           # Add a new config parameter
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ ${AVAILABLE_CONFIG[(r)$3]} == "$3" ]]; then
             # Delete the line and save new command
             delete_line_starts "$3=" $CFILE
             echo "$3=$4" >> $CFILE
@@ -352,7 +354,7 @@ pm () {
           fi
         elif [[ $2 == "remove" ]]; then
           # Remove the element
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ ${AVAILABLE_CONFIG[(r)$3]} == "$3" ]]; then
             # Delete the line and save new command
             delete_line_starts "$3=" $CFILE
             echo "The configuration parameter $3 has been updated"
@@ -361,7 +363,7 @@ pm () {
           fi
         elif [[ $2 == "get" ]]; then
           # Show the value of element
-          if [[ ${AVAILABLE_CONFIG[(r)$3]} == $3 ]]; then
+          if [[ ${AVAILABLE_CONFIG[(r)$3]} == "$3" ]]; then
             # Delete the line and save new command
             config_value=$(get_config_value "$3")
             echo "The configuration value for $3 is: $config_value"
@@ -375,31 +377,31 @@ pm () {
       # Add a property to a project
       'config-project' )
         # Check if project exist
-        project=$(check_project $2)
+        project=$(check_project "$2")
         if [[ "x$project" == "xok" ]]; then
           # Continue
           if [[ $3 == "add" ]]; then
             # Add a new config parameter
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
-              add_config_to_project $2 $4 $5
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == "$4" ]]; then
+              add_config_to_project "$2" "$4" "$5"
               echo "The configuration has been updated"
             else
               echo "The config parameter $4 doesn't exist"
             fi
           elif [[ $3 == "remove" ]]; then
             # Remove the element
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == "$4" ]]; then
               # Delete the config for the project
-              delete_project_property $2 $4
+              delete_project_property "$2" "$4"
               echo "The configuration parameter $4 has been removed"
             else
               echo "The config parameter $4 doesn't exist"
             fi
           elif [[ $3 == "get" ]]; then
             # Show the value of element
-            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == $4 ]]; then
+            if [[ ${AVAILABLE_PROJECT_CONFIG[(r)$4]} == "$4" ]]; then
               # Get the config value of a project
-              value=$(get_config_project_value $2 $4)
+              value=$(get_config_project_value "$2" "$4")
               if [[ "x$value" == "x" ]]; then
                 echo "The project hasn't got any value for $4"
               else
@@ -416,8 +418,8 @@ pm () {
         fi
         ;;
       # List projects
-      'list' | 'l' ) 
-        while read line
+      'list' | 'l' )
+        while read -r line
         do
           if [[ $line =~ ^.*:.* ]]; then
             el=("${(@s/:/)line}") # : modifier
@@ -436,14 +438,14 @@ pm () {
         PM_DELETE_INITIAL=0
         PM_DELETE_FINAL=0
         # Read all lines
-        while read line
+        while read -r line
         do
           if [[ $line == "$NAME:"* ]]; then
             PM_DELETE_INITIAL=$PM_INDEX
           elif [[ $line == "/$NAME" ]]; then
             PM_DELETE_FINAL=$PM_INDEX
           fi
-          PM_INDEX=$(($PM_INDEX + 1))
+          PM_INDEX=$((PM_INDEX + 1))
         done < "$PFILE"
 
         # Check if the repo exist
@@ -466,7 +468,7 @@ pm () {
         PM_PROJ_PATH=""
 
         # Read lines
-        while read line
+        while read -r line
         do
           el=("${(@s/:/)line}") # @ modifier
           if [[ $line == "$NAME:"* ]]; then
@@ -479,23 +481,23 @@ pm () {
           echo "The project doesn't exist"
         else
           # Change the path. Show some info
-          cd $PM_PROJ_PATH
+          cd "$PM_PROJ_PATH"
           echo "Current project: ${NAME}"
           # Execute after all config if it exists
           exe_after=$(get_config_value "after-all")
           exe_git_info=$(get_config_value "git-info")
-          exe_after_project=$(get_config_project_value $NAME "after")
-          exe_git_info_project=$(get_config_project_value $NAME "git-info")
-          
+          exe_after_project=$(get_config_project_value "$NAME" "after")
+          exe_git_info_project=$(get_config_project_value "$NAME" "git-info")
+
           if [[ "$exe_git_info_project" == "yes" || "$exe_git_info" == "yes" ]]; then
             if ! type "git" > /dev/null 2>&1; then
               echo "You have active Git-info option, but you haven't got Git installed."
             elif [[ -d .git ]]; then
               branch=$(get_branch)
               echo "------------"
-              echo "Branch:\t\t $branch"
+              printf "Branch:\\t\\t %s" "$branch"
               last_commit=$(git log -1 --format="(%h) %B")
-              echo "Last commit:\t $last_commit"
+              printf "Last commit:\\t %s" "$last_commit"
               echo "Changes:"
               git status -s
               echo "------------"
@@ -504,11 +506,11 @@ pm () {
 
           # Exec after
           if [[ "$exe_after" != "" ]]; then
-            eval $exe_after
+            eval "$exe_after"
           fi
 
           if [[ "$exe_after_project" != "" ]]; then
-            eval $exe_after_project
+            eval "$exe_after_project"
           fi
         fi
         ;;
