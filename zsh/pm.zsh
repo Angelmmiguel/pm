@@ -76,21 +76,21 @@ pm () {
   # Show the help of the project
   #
   show_help () {
-    printf "PM is a simple project manager. Switch to your projects faster"
-    printf "and improve your productivity."
-    printf ""
-    printf "Usage:"
-    printf "   pm <add|config|config-project|help|go|list|remove|version>"
-    printf ""
-    printf "Commands:"
-    printf "   add \\t\\t\\t Add a new project based on current path"
-    printf "   config \\t\\t Change global configuration parameters"
-    printf "   config-project \\t Change the configuration of a project"
-    printf "   help \\t\\t Show this help"
-    printf "   go \\t\\t\\t Switch to a project"
-    printf "   list \\t\\t Show a list of stored projects"
-    printf "   remove \\t\\t Remove the project from PM"
-    printf "   version \\t\\t Show current version"
+    echo "PM is a simple project manager. Switch to your projects faster"
+    echo "and improve your productivity."
+    echo ""
+    echo "Usage:"
+    echo "   pm <add|config|config-project|help|go|list|remove|version>"
+    echo ""
+    echo "Commands:"
+    echo "   add \\t\\t\\t Add a new project based on current path"
+    echo "   config \\t\\t Change global configuration parameters"
+    echo "   config-project \\t Change the configuration of a project"
+    echo "   help \\t\\t Show this help"
+    echo "   go \\t\\t\\t Switch to a project"
+    echo "   list \\t\\t Show a list of stored projects"
+    echo "   remove \\t\\t Remove the project from PM"
+    echo "   version \\t\\t Show current version"
   }
 
   #
@@ -495,9 +495,9 @@ pm () {
             elif [[ -d .git ]]; then
               branch=$(get_branch)
               echo "------------"
-              printf "Branch:\\t\\t %s" "$branch"
+              echo "Branch:\\t\\t $branch"
               last_commit=$(git log -1 --format="(%h) %B")
-              printf "Last commit:\\t %s" "$last_commit"
+              echo "Last commit:\\t $last_commit"
               echo "Changes:"
               git status -s
               echo "------------"
