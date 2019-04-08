@@ -7,7 +7,7 @@ pm () {
   CURRENT_MINOR=4
   CURRENT_PATCH=0rc
   # Base
-  if [ ! -z "$PM_BASE"]; then
+  if [ -z "$PM_BASE" ]; then
     PM_BASE=$HOME/.pm
   fi
 
