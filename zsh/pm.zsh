@@ -17,6 +17,8 @@ pm () {
   CFILE=$PM_BASE/config
   # Version File
   VFILE=$PM_BASE/version
+  # Last project file
+  LFILE=$PM_BASE/lastproject
   # Available config values
   AVAILABLE_CONFIG=(after-all git-info)
   # Available config values for project
@@ -129,7 +131,7 @@ pm () {
 
   #
   # Find a line that starts with an string. Return the index
-  # 
+  #
   # $1 : String that start the line
   # $2 : Path to the file
   #
@@ -194,7 +196,7 @@ pm () {
   add_config_to_project () {
     # Project
     local project=$1
-    
+
     # Delete the project property if exist
     delete_project_property $1 $2
 
@@ -230,7 +232,7 @@ pm () {
       fi
       index=$(($index + 1))
     done < "$PFILE"
-    
+
     # Check if we need to delete the config
     if [[ $delete -ne 0  ]]; then
       sed -i -e "${delete},1d" $PFILE
@@ -416,7 +418,7 @@ pm () {
         fi
         ;;
       # List projects
-      'list' | 'l' ) 
+      'list' | 'l' )
         while read line
         do
           if [[ $line =~ ^.*:.* ]]; then
@@ -465,6 +467,15 @@ pm () {
         NAME=$2
         PM_PROJ_PATH=""
 
+        # If empty name, use last project
+        if [[ -e $LFILE && -z $NAME ]]
+        then
+            read NAME < $LFILE
+        else
+            echo $NAME > $LFILE
+        fi
+
+
         # Read lines
         while read line
         do
@@ -486,7 +497,7 @@ pm () {
           exe_git_info=$(get_config_value "git-info")
           exe_after_project=$(get_config_project_value $NAME "after")
           exe_git_info_project=$(get_config_project_value $NAME "git-info")
-          
+
           if [[ "$exe_git_info_project" == "yes" || "$exe_git_info" == "yes" ]]; then
             if ! type "git" > /dev/null 2>&1; then
               echo "You have active Git-info option, but you haven't got Git installed."
