@@ -17,6 +17,8 @@ pm () {
   CFILE=$PM_BASE/config
   # Version File
   VFILE=$PM_BASE/version
+  # Last project file
+  LFILE=$PM_BASE/lastproject
   # Available config values
   AVAILABLE_CONFIG=(after-all git-info)
   # Available config values for project
@@ -301,7 +303,7 @@ pm () {
     branch=$(git branch | grep "*")
     branch=("${(@s/ /)branch}")
     branch=$branch[2]
-    echo "${branch[@]}"
+    echo "$branch"
   }
 
   # Initialize folders and file if isn't exists
@@ -466,6 +468,15 @@ pm () {
         # Path of the project
         NAME=$2
         PM_PROJ_PATH=""
+
+        # If empty name, use last project
+        if [[ -e "$LFILE" && -z "$NAME" ]]
+        then
+            read NAME < "$LFILE"
+        else
+            echo "$NAME" > "$LFILE"
+        fi
+
 
         # Read lines
         while read -r line
