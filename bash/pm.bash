@@ -438,7 +438,7 @@ pm () {
         fi
         ;;
       # List projects
-      'list' | 'l' )
+      'list' | 'ls' | 'l' )
         while read line
         do
           if [[ $line =~ ^.*:.* ]]; then
