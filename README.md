@@ -6,20 +6,20 @@ To install the program, download the installer and execute it.
 
 ```zsh
 cd ~
-wget https://raw.githubusercontent.com/Angelmmiguel/pm/master/install.sh
-chmod 755 ./install.sh
+curl https://raw.githubusercontent.com/Angelmmiguel/pm/master/install.sh -o pm-install.sh
+chmod 755 ./pm-install.sh
 ```
 
 If you want to install last stable version, only run downloaded script:
 
 ```zsh
-. ./install.sh
+. ./pm-install.sh
 ```
 
 If you want to install latest development version, run the installer with `--prerelease` option:
 
 ```zsh
-./install.sh --prerelease
+./pm-install.sh --prerelease
 ```
 
 Type your shell when the installer ask to you:
